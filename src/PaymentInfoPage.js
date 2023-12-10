@@ -48,7 +48,7 @@ function PaymentInfoPage() {
     .filter((seatNumber) => seatNumber !== null);
 
   const totalCost = numberOfPeople * 1000; // 사람 수에 따른 티켓 가격 계산
-  const accountNumber = "1002-755452471";
+  const accountNumber = "1002-755-452471";
   const bank = "우리은행";
 
   return (

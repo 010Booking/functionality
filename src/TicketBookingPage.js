@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Seat from "./Seat";
@@ -13,6 +13,21 @@ import { useDispatch, useSelector } from "react-redux";
 
 // const app = initializeApp(firebaseConfig);
 // const db = getFirestore(app);
+const StyledInput = styled.input`
+  width: 200px;
+  height: 30px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+  margin: 10px 0;
+  text-align: center; // 텍스트를 중앙에 정렬
+  width: 100%; // 부모 컴포넌트의 가로 길이
+  display: flex; // flexbox
+  justify-content: center; // 가로 방향으로 중앙
+  align-items: center; // 세로 방향으로 중앙
+`;
 
 const Modal = styled.div`
   position: fixed;
@@ -37,8 +52,9 @@ const Modal = styled.div`
   }
 `;
 const MainContainer = styled.div`
-  background-color: #00000;
+  background-color: #ffdfde;
   border-radius: 10px;
+  padding: 20px;
 `;
 const Container = styled.div`
   //#AFAEB1
@@ -46,38 +62,45 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   font-family: Arial, sans-serif;
-  background-color: #0000; // 웹 페이지 배경 색상 변경
+  background-color: #6a7ba2; // 웹 페이지 배경 색상 변경
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
 `;
 
-const Title = styled.h1``;
+const Title = styled.h1`
+  align-items: center;
+  text-align: center; // 텍스트를 중앙에 정렬
+  width: 100%; // 부모 컴포넌트의 가로 길이
+  display: flex; // flexbox
+  justify-content: center; // 가로 방향으로 중앙
+  align-items: center; // 세로 방향으로 중앙
+`;
 
 const CheckboxContainer = styled.div`
-  display: flex;
   align-items: center;
+  text-align: center; // 텍스트를 중앙에 정렬
+  width: 100%; // 부모 컴포넌트의 가로 길이
+  justify-content: center; // 가로 방향으로 중앙
+  align-items: center; // 세로 방향으로 중앙
   margin-bottom: 10px;
 `;
 const SeatContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(20, 1fr);
   gap: 10px;
-  background-color: #958f9c;
+  padding: 20px;
+  background-color: #6a7ba2;
   border-radius: 10px;
 `;
 const CheckboxLabel = styled.label`
   margin-left: 10px;
-  color: #80758f; // 체크박스 라벨의 글자 색상 변경
-`;
-
-const Checkbox = styled.input`
-  color: #80758f; // 체크박스의 색상 변경
+  color: #fffff; // 체크박스 라벨의 글자 색상 변경
 `;
 
 const Button = styled.button`
   padding: 10px 20px;
-  background-color: #958f9c; // 버튼의 배경 색상 변경
+  background-color: #6a7ba2; // 버튼의 배경 색상 변경
   color: #010f29; // 버튼의 글자 색상 변경
   border: none;
   border-radius: 5px;
@@ -213,10 +236,11 @@ function TicketBookingPage() {
   return (
     <Container>
       <MainContainer>
+        <Title> 맨끝줄소년 Test</Title>
         <Title>날짜 선택</Title>
         {dates.map((date) => (
           <CheckboxContainer key={date}>
-            <input
+            <StyledInput
               type="checkbox"
               checked={selectedDates.includes(date)}
               onChange={() => handleDateSelect(date)}
@@ -226,7 +250,7 @@ function TicketBookingPage() {
         ))}
 
         <Title>사람 수 선택</Title>
-        <input
+        <StyledInput
           type="number"
           min="1"
           max="200"
@@ -259,7 +283,7 @@ function TicketBookingPage() {
         {showModal && (
           <Modal>
             <div className="modal-content">
-              <input
+              <StyledInput
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
