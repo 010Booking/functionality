@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import React from "react";
 import styled from "styled-components";
 import html2canvas from "html2canvas";
+import db from "./db";
 
 const Container = styled.div`
   display: flex;
@@ -25,6 +26,9 @@ const Info = styled.p`
   margin-bottom: 5px;
 `;
 
+const saveSeatsToFirestore = async (date, seats) => {
+  await db.collection("seats").doc(date).set({ seats });
+};
 function PaymentInfoPage() {
   const handleCaptureClick = () => {
     html2canvas(document.body).then((canvas) => {
@@ -50,7 +54,12 @@ function PaymentInfoPage() {
   const totalCost = numberOfPeople * 1000; // 사람 수에 따른 티켓 가격 계산
   const accountNumber = "1002-755-452471";
   const bank = "우리은행";
+  const handleSubmit = async () => {
+    // 좌석 정보를 Firestore에 저장
+    await saveSeatsToFirestore(date, seats);
 
+    // 결제 정보 제출 등의 추가 로직...
+  };
   return (
     <Container>
       <Title>결제 정보</Title>
@@ -65,9 +74,11 @@ function PaymentInfoPage() {
           계좌 번호: {accountNumber} ({bank})
         </Info>
       </InfoContainer>
+
       <Container>
         {/* ... */}
         <button onClick={handleCaptureClick}>화면 캡처</button>
+        <button onClick={handleSubmit}>결제하기</button>
       </Container>
     </Container>
   );

@@ -1,18 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Seat from "./Seat";
+import db from "./db";
 import { useDispatch, useSelector } from "react-redux";
-// import { initializeApp } from "firebase/app";
-// import { getFirestore } from "firebase/firestore";
 
-// // 파이어베이스 연동 설정...
-// const firebaseConfig = {
-//   // 여기에 파이어베이스 설정 정보...
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
 const StyledInput = styled.input`
   width: 200px;
   height: 30px;
@@ -109,6 +101,11 @@ const Button = styled.button`
 `;
 
 function TicketBookingPage() {
+  const getSeatsFromFirestore = async (date) => {
+    const doc = await db.collection("seats").doc(date).get();
+    return doc.exists ? doc.data().seats : [];
+  };
+
   const [selectedSeats, setSelectedSeats] = useState(Array(200).fill(false));
   const seats = useSelector((state) => state.seats);
   const [phone, setPhone] = useState("");
@@ -160,7 +157,16 @@ function TicketBookingPage() {
     .map((seat, index) => (seat ? index + 1 : null))
     .filter((seatNumber) => seatNumber !== null);
   console.log("선택된 좌석 번호:", selectedSeatNumbers);
+  const [bookedSeats, setBookedSeats] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const seats = await getSeatsFromFirestore(selectedDates[0]);
+      setBookedSeats(seats);
+    };
+
+    fetchData();
+  }, [selectedDates]);
   const handleDateSelect = (date) => {
     setSelectedDates((prevDates) => {
       const newDates = prevDates.includes(date)
@@ -235,6 +241,16 @@ function TicketBookingPage() {
 
   return (
     <Container>
+      <div>
+        {seats.map((seat) => (
+          <Seat
+            key={seat.id}
+            seat={seat}
+            onClick={handleSeatClick}
+            isBooked={bookedSeats.includes(seat.id)} // 이미 예매된 좌석인지 확인
+          />
+        ))}
+      </div>
       <MainContainer>
         <Title> 맨끝줄소년 Test</Title>
         <Title>날짜 선택</Title>
