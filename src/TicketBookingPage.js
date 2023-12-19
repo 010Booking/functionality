@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import Seat from "./Seat";
 import { useDispatch, useSelector } from "react-redux";
 // import { initializeApp } from "firebase/app";
 // import { getFirestore } from "firebase/firestore";
@@ -109,8 +108,6 @@ const Button = styled.button`
 `;
 
 function TicketBookingPage() {
-  const [selectedSeats, setSelectedSeats] = useState(Array(200).fill(false));
-  const seats = useSelector((state) => state.seats);
   const [phone, setPhone] = useState("");
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
@@ -143,23 +140,11 @@ function TicketBookingPage() {
       return;
     }
 
-    if (selectedSeats.filter(Boolean).length < peopleCount) {
-      alert("좌석을 선택해 주세요.");
-      return;
-    }
-
-    const selectedSeatNumbers = selectedSeats
-      .map((selected, index) => (selected ? index + 1 : null))
-      .filter((seatNumber) => seatNumber !== null);
-    console.log("예매 완료: ", selectedDates, selectedSeatNumbers);
+    console.log("예매 완료: ", selectedDates);
     // TODO: 실제 예매 로직 구현
 
     navigate("/personal-info"); // '/personal-info' 경로로 이동
   };
-  const selectedSeatNumbers = seats
-    .map((seat, index) => (seat ? index + 1 : null))
-    .filter((seatNumber) => seatNumber !== null);
-  console.log("선택된 좌석 번호:", selectedSeatNumbers);
 
   const handleDateSelect = (date) => {
     setSelectedDates((prevDates) => {
@@ -181,22 +166,6 @@ function TicketBookingPage() {
       setPeopleCount(newPeopleCount);
     } else if (newPeopleCount < peopleCount) {
       // 사람 수를 줄이면 가장 나중에 선택된 좌석부터 선택 해제함
-      const newSelectedSeats = [...selectedSeats];
-      let count = selectedSeats.reduce(
-        (count, selected) => count + (selected ? 1 : 0),
-        0
-      );
-      for (
-        let i = selectedSeats.length - 1;
-        i >= 0 && count > newPeopleCount;
-        i--
-      ) {
-        if (newSelectedSeats[i]) {
-          newSelectedSeats[i] = false;
-          count--;
-        }
-      }
-      setSelectedSeats(newSelectedSeats);
       setPeopleCount(newPeopleCount);
 
       // Redux action을 직접 dispatch합니다.
@@ -204,33 +173,10 @@ function TicketBookingPage() {
         type: "SET_NUMBER_OF_PEOPLE",
         numberOfPeople: newPeopleCount,
       });
-      dispatch({ type: "SET_SEATS", seats: newSelectedSeats });
     }
 
     // Redux action을 직접 dispatch합니다.
     dispatch({ type: "SET_NUMBER_OF_PEOPLE", numberOfPeople: newPeopleCount });
-  };
-  const handleSeatClick = (index) => {
-    // 사람 수가 설정되지 않았다면 좌석 선택을 무시
-    if (peopleCount === 0) {
-      return;
-    }
-
-    const selectedSeatCount = selectedSeats.reduce(
-      (count, selected) => count + (selected ? 1 : 0),
-      0
-    );
-    if (!selectedSeats[index] && selectedSeatCount >= peopleCount) {
-      // 이미 선택한 좌석 수가 사람 수보다 많으면 추가로 좌석을 선택하지 않음
-      return;
-    }
-
-    const newSelectedSeats = [...selectedSeats];
-    newSelectedSeats[index] = !newSelectedSeats[index];
-    setSelectedSeats(newSelectedSeats);
-
-    // Redux 상태 업데이트
-    dispatch({ type: "SET_SEATS", seats: newSelectedSeats });
   };
 
   return (
@@ -259,23 +205,9 @@ function TicketBookingPage() {
           disabled={selectedDates.length === 0}
         />
 
-        <Title>좌석 선택</Title>
-        <SeatContainer>
-          {selectedSeats.map((selected, index) => (
-            <Seat
-              key={index}
-              selected={selected}
-              onClick={() => handleSeatClick(index)} // 변경된 함수를 직접 호출합니다.
-            />
-          ))}
-        </SeatContainer>
-
         <Button
           onClick={handleBookTicket}
-          disabled={
-            selectedDates.length === 0 ||
-            selectedSeats.filter(Boolean).length < peopleCount
-          }
+          disabled={selectedDates.length === 0}
         >
           티켓 예매
         </Button>

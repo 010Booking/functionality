@@ -50,8 +50,6 @@ function PersonalInfoPage() {
   };
 
   const handleSubmit = () => {
-    // 사용자가 입력한 이름과 전화번호를 처리하는 로직을 추가합니다.
-    // 예를 들어, 서버에 전송하거나 로컬 스토리지에 저장할 수 있습니다.
     console.log(`Name: ${name}, Phone Number: ${phoneNumber}`);
 
     // 개인정보 입력이 완료되면 계좌번호 안내 페이지로 이동

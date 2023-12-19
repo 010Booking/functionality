@@ -37,16 +37,12 @@ function PaymentInfoPage() {
     });
   };
 
-  const { date, numberOfPeople, seats, names } = useSelector((state) => ({
+  const { date, numberOfPeople, names } = useSelector((state) => ({
     date: state.date,
     numberOfPeople: state.numberOfPeople,
     seats: state.seats,
     names: state.names,
   }));
-  const selectedSeatsNumbers = seats
-    .map((seat, index) => (seat ? index + 1 : null))
-    .filter((seatNumber) => seatNumber !== null);
-
   const totalCost = numberOfPeople * 1000; // 사람 수에 따른 티켓 가격 계산
   const accountNumber = "1002-755-452471";
   const bank = "우리은행";
@@ -58,7 +54,6 @@ function PaymentInfoPage() {
       <InfoContainer>
         <Info>{names} 님의 예매 정보</Info>
         <Info>관람 일시: {date.join(", ")}</Info>
-        <Info>좌석 번호: {selectedSeatsNumbers.join(", ")}</Info>
         <Info>관객 수: {numberOfPeople}</Info>
         <Info>티켓 가격: {totalCost} 원</Info>
         <Info>
