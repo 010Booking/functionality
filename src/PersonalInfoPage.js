@@ -41,6 +41,8 @@ const Button = styled.button`
 function PersonalInfoPage() {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,16 +51,39 @@ function PersonalInfoPage() {
     dispatch({ type: "SET_NAMES", names });
   };
 
-  const handleSubmit = () => {
-    console.log(`Name: ${name}, Phone Number: ${phoneNumber}`);
+  const handlePhoneNumberChange = (phoneNumber) => {
+    dispatch({ type: "SET_PHONE_NUMBER", phoneNumber });
+  };
 
-    // 개인정보 입력이 완료되면 계좌번호 안내 페이지로 이동
-    navigate("/payment-info");
+  const handleEmailChange = (email) => {
+    dispatch({ type: "SET_EMAIL", email });
+  };
+
+  const handleSubmit = () => {
+    if (email !== confirmEmail) {
+      alert("이메일이 일치하지 않습니다. 다시 확인해주세요.");
+      return;
+    }
+
+    const isConfirmed = window.confirm(`
+      이름: ${name}
+      전화번호: ${phoneNumber}
+      이메일: ${email}
+      이 정보가 맞습니까?
+    `);
+
+    if (isConfirmed) {
+      console.log(
+        `Name: ${name}, Phone Number: ${phoneNumber}, Email: ${email}`
+      );
+      // 개인정보 입력이 완료되면 계좌번호 안내 페이지로 이동
+      navigate("/payment-info");
+    }
   };
 
   return (
     <Container>
-      <Title>개인 정보 입력</Title>
+      <Title>예매자 정보 입력</Title>
       <InputContainer>
         <Label>이름</Label>
         <Input
@@ -76,7 +101,30 @@ function PersonalInfoPage() {
         <Input
           type="tel"
           value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          placeholder="- 없이 입력해 주세요"
+          onChange={(e) => {
+            setPhoneNumber(e.target.value);
+            handlePhoneNumberChange(e.target.value);
+          }}
+        />
+      </InputContainer>
+
+      <Label>이메일</Label>
+      <Input
+        type="email"
+        value={email}
+        onChange={(e) => {
+          setEmail(e.target.value);
+          handleEmailChange(e.target.value);
+        }}
+      />
+
+      <InputContainer>
+        <Label>이메일 재확인</Label>
+        <Input
+          type="email"
+          value={confirmEmail}
+          onChange={(e) => setConfirmEmail(e.target.value)}
         />
       </InputContainer>
 

@@ -1,17 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-// import { initializeApp } from "firebase/app";
-// import { getFirestore } from "firebase/firestore";
+import { useDispatch } from "react-redux";
 
-// // 파이어베이스 연동 설정...
-// const firebaseConfig = {
-//   // 여기에 파이어베이스 설정 정보...
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
 const StyledInput = styled.input`
   width: 200px;
   height: 30px;
@@ -84,14 +75,6 @@ const CheckboxContainer = styled.div`
   align-items: center; // 세로 방향으로 중앙
   margin-bottom: 10px;
 `;
-const SeatContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(20, 1fr);
-  gap: 10px;
-  padding: 20px;
-  background-color: #6a7ba2;
-  border-radius: 10px;
-`;
 const CheckboxLabel = styled.label`
   margin-left: 10px;
   color: #fffff; // 체크박스 라벨의 글자 색상 변경
@@ -136,7 +119,7 @@ function TicketBookingPage() {
     }
 
     if (peopleCount === 0) {
-      alert("사람 수를 선택해 주세요.");
+      alert("올바른 사람 수를 선택해 주세요.");
       return;
     }
 

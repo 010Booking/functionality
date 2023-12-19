@@ -6,6 +6,8 @@ const initialState = {
   numberOfPeople: 0,
   seats: [],
   names: [],
+  phoneNumber: "",
+  email: "",
 };
 
 function reducer(state = initialState, action) {
@@ -16,6 +18,10 @@ function reducer(state = initialState, action) {
       return { ...state, numberOfPeople: action.numberOfPeople };
     case "SET_NAMES":
       return { ...state, names: action.names };
+    case "SET_EMAIL":
+      return { ...state, email: action.email };
+    case "SET_PHONE_NUMBER":
+      return { ...state, phoneNumber: action.phoneNumber };
     default:
       return state;
   }
